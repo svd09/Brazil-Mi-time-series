@@ -1,9 +1,5 @@
 # Brazil Temperature Extremes & MI Mortality — Analysis Pipeline
 
-> **Note on this README:** No README existed for this project, so this file was
-> reverse-engineered from the 11 R scripts provided. Folder names, run order, and
-> some data-flow assumptions are inferred from `source()`/`read`/`write` calls in
-> the code — please correct anything that doesn't match your actual setup.
 
 ## 1. What this project does
 
