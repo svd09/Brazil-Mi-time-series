@@ -139,48 +139,9 @@ Key modeling packages:
 - **`ckbplotr`** + **`cowplot`** — forest plots
 - **`qs`** — fast serialization of large model objects
 
-## 7. Known issues / cleanup suggestions
 
-These are observations from reading the code, not changes that have been made:
 
-1. **Missing function file:** `af_an_from_beta()` is called but never defined
-   in the uploaded scripts (see §5). Locate `codes/AF and AN for conditional
-   poisson models function.R` and add it to the repo, or confirm it's just
-   `af_an_from_beta_event_days()` under an older name.
-2. **Inconsistent I/O paths:** mix of relative (`results/...`) and absolute,
-   user-specific paths (`/home/svd14/...`, `/mnt/vstor/...`). Recommend
-   centralizing via a project-root helper (e.g. `here::here()`) or a `config.R`.
-3. **Regional AF/AN script incomplete:** `PAPER_SCRIPT_AF_AND_AN_FOR_REGIONAL_MODELS.R`
-   only has working blocks for **North** and **Southeast**; Northeast and South
-   are not yet wired up (their model objects are produced by
-   `PAPER_SCRIPT_MODEL_ETE_FOR_REGIONS.R` / `PAPER_SCRIPT_ETE_MODELS_HEAT_REGIONS.R`
-   but never consumed here).
-4. **`PAPER_SCRIPT_GETTING_AF___AN_PER_EVENT_DAY.R`** has leftover/duplicated
-   code near the end (a second, unused `EHE_01`/`model_01_2` block, and a
-   `rm(list = setdiff(ls(), c("results_01_2", ...)))` referencing objects that
-   are never created — `models_ehe`, `cb_ehe`). Worth trimming before final use.
-5. **`PAPER_SCRIPT_MODELS_BY_AGE_AND_SEX_HPC_PART_III.R`** has a large block of
-   "junk code" explicitly marked as such at the bottom (duplicate crossbasis/
-   model loops, a `progress_bar` demo snippet) — flagged in-code by the
-   original author as safe to delete.
-6. **Plot scripts use hardcoded data, not pipeline output:**
-   `EHE_PLOT_SUBCOHORT_HEAT.R` and `ECE_PLOT_SUBCOHORT_COLD.R` currently build
-   their `df` from literal numbers typed into the script rather than reading
-   from the `results/*_or.csv` / `results/*_res_cold.csv` files written by
-   `PAPER_SCRIPT_MODELS_BY_AGE_AND_SEX_HPC_PART_III.R`. If those numbers were
-   copy-pasted from that script's console output, consider having the plot
-   scripts read the CSVs directly so the figures update automatically when
-   models are re-run.
-7. **Naming/typo:** in `ECE_PLOT_SUBCOHORT_COLD.R`, one event level is
-   `"ECE_02_3"` — almost certainly meant to be `"ECE_01_3"` (i.e. `EHE_01_3`),
-   consistent with the `EHE_01`/`EHE_01_2`/`EHE_01_3` naming used everywhere else.
-8. **`gnm(..., eliminate = factor(stratum))` re-fit repeatedly per exposure
-   variable** — each region/subgroup script loops over 6–7 exposure variables,
-   refitting a full model each time. This is fine for correctness but is the
-   main runtime/memory cost of the pipeline (hence the aggressive `rm()`/`gc()`
-   calls and HPC use for the subgroup script).
-
-## 8. Output summary (what each script ultimately produces)
+## 7. Output summary (what each script ultimately produces)
 
 | Output | Produced by | Description |
 |---|---|---|
