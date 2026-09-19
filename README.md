@@ -69,15 +69,6 @@ graphs/                # .tiff figures (forest plots, subgroup plots)
 codes/                 # shared function scripts, sourced by the paper scripts
 ```
 
-⚠️ **Inconsistent paths found in the code:**
-- Most scripts write to relative `results/...` and `graphs/...` paths.
-- `PAPER_SCRIPT_MODELS_BY_AGE_AND_SEX_HPC_PART_III.R` writes several outputs to
-  an absolute path, `/home/svd14/brazil mi mortality/results/...` (HPC user
-  home directory), and reads input from `/mnt/vstor/SOM_CVRI_JXD101/DATA_SCIENCE/brazil mortality data/`.
-- These will need to be standardized (e.g., via a single `here::here()` root
-  or a config file) if the scripts are to be run outside the original HPC
-  environment.
-
 ## 4. Script inventory & suggested run order
 
 The scripts are not currently numbered, and several read data/objects saved
@@ -127,16 +118,6 @@ af_an_from_beta_event_days(
 inside a `pblapply()` loop over Monte Carlo draws of the coefficient vector
 (`MASS::mvrnorm(nsim, mu = b, Sigma = V)`), then row-bound to get a simulation-based
 distribution of AF/AN.
-
-> ⚠️ **Missing function referenced elsewhere:** Several scripts
-> (`ETE_AND_ECE_MODELS_FOR_WHOLE_BRAZIL_.R` is the exception — it computes OR only)
-> `source("codes/AF and AN for conditional poisson models function.R")` and call
-> **`af_an_from_beta()`** (no `_event_days` suffix) — this is a different,
-> simpler function (all-day AF/AN only, no event-day restriction) that was
-> **not included** in the uploaded files. It should be added to `codes/` for
-> those scripts to run:
-> - `PAPER_SCRIPT_AF_AND_AN_FOR_REGIONAL_MODELS.R`
-> - `PAPER_SCRIPT_MODEL_ETE_AND_AF_AND_AN_.R`
 
 ## 6. Dependencies
 
@@ -214,14 +195,6 @@ These are observations from reading the code, not changes that have been made:
 | `graphs/forest_plot_ehe.tiff`, `graphs/forest_plot_ece.tiff` | `MAKING_FORESTPLOTS.R` | Forest plots of regional OR, heat & cold |
 | `graphs/EHE_subgroup_plot.tiff`, `graphs/ECE_effects_by_subgroup.tiff` | `EHE_PLOT_SUBCOHORT_HEAT.R`, `ECE_PLOT_SUBCOHORT_COLD.R` | OR comparison across Males/Females/Young/Old |
 
-## 9. Suggested next steps
 
-- [ ] Locate/recreate `af_an_from_beta()` and add it to `codes/`
-- [ ] Standardize file paths (remove hardcoded HPC user paths)
-- [ ] Complete the regional AF/AN script for Northeast and South
-- [ ] Point the two subgroup plot scripts at the actual `results/*.csv` files
-- [ ] Remove dead/junk code blocks flagged in §7
-- [ ] Consider numbering scripts by pipeline stage (e.g. `01_`, `02_`, ...) so
-      run order is unambiguous without reading this README
 
 
